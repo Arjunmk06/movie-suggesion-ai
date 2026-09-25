@@ -7,3 +7,5 @@ export const requestBodySchema = z.object({
     mood: z.string().trim().min(1,{message: "mood cannot be empty"}).describe("mood of movie should list"),
     count: z.number().min(2).max(5).describe("how many movies can sugges")
 })
+
+export type MovieRequestInput = z.infer<typeof requestBodySchema>
