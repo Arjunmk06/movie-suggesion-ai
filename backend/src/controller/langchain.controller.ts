@@ -1,6 +1,8 @@
 import type { Request, Response } from "express";
-import { getRecommendations, getRecommendationsStructured } from "../service/langchain.service.js";
+import { getRecommendationsStructured, isMovieRelated } from "../service/langchain.service.js";
 import { requestBodySchema } from "../schema/request.validator.js";
+
+const outOfScopeMessage = "I am movie suggestor assistant, can;t help wth other requirements";
 
 export async function getRecommendationController(
     req:Request ,
@@ -17,6 +19,15 @@ export async function getRecommendationController(
     }
 
     try{
+        const isRelated = await isMovieRelated(validation.data.userPrompt);
+
+        if (!isRelated) {
+            return res.status(422).json({
+                code: "OUT_OF_SCOPE",
+                error: outOfScopeMessage,
+            });
+        }
+
         const result = await getRecommendationsStructured(validation.data);
 
     return res.status(200).json({
