@@ -196,10 +196,59 @@ select:focus {
   text-align: center;
 }
 
+.loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  min-height: 120px;
+  color: #d6e0ee;
+  font-weight: 600;
+  animation: loading-appear 180ms ease-out both;
+}
+
+.loading-spinner {
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border: 3px solid rgba(125, 211, 252, 0.22);
+  border-top-color: #f59e0b;
+  border-right-color: #7dd3fc;
+  border-radius: 50%;
+  animation: loading-spin 800ms linear infinite;
+}
+
 .movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 18px;
+}
+
+@keyframes loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes loading-appear {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loading-state {
+    animation: none;
+  }
+
+  .loading-spinner {
+    animation-duration: 1800ms;
+  }
 }
 
 .movie-card {

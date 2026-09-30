@@ -13,6 +13,7 @@ type RecommendationApiResponse = {
   data?: {
     movies?: Movie[]
   }
+  code?: string
   error?: string
   details?: unknown
 }
@@ -84,6 +85,7 @@ function App() {
       return
     }
 
+    setMovies([])
     setLoading(true)
 
     try {
@@ -102,6 +104,11 @@ function App() {
 
       if (!response.ok) {
         const serverError = typeof payload?.error === 'string' ? payload.error : 'Unable to load recommendations.'
+        if (payload?.code === 'OUT_OF_SCOPE') {
+          setMovies([])
+          window.alert(serverError)
+          return
+        }
         throw new Error(serverError)
       }
 
@@ -207,6 +214,13 @@ function App() {
           {errorMessage ? (
             <div className="notification error" role="alert">
               {errorMessage}
+            </div>
+          ) : null}
+
+          {loading ? (
+            <div className="loading-state" role="status" aria-live="polite">
+              <span className="loading-spinner" aria-hidden="true" />
+              <span>Finding movie recommendations...</span>
             </div>
           ) : null}
 
